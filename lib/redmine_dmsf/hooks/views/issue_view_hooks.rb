@@ -118,9 +118,9 @@ module RedmineDmsf
       end
 
       def allowed_to_attach_attachments(container)
-        unless defined?(EasyExtensions)
-          return true
-        end
+        # unless defined?(EasyExtensions)
+        #   return true
+        # end
         if allowed_to_attach_documents(container) && (!container.project.module_enabled?(:documents))
           return false
         end
@@ -164,19 +164,25 @@ module RedmineDmsf
           # Add Dmsf upload form
           container = context[:container]
           if allowed_to_attach_documents(container)
-            html = (description ? '<p' : '<div')
-            html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') && allowed_to_attach_attachments(container) ? 'display: none;' : ''}\">"
+            html = '<div style="clear: both;"></div>'
+            html << (description ? '<p' : '<div')
+            html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') && allowed_to_attach_attachments(container) ? 'display: none;' : ''}\" class='dmsf container-holder'>"
             if label
               html << "<label>#{l(:label_document_plural)}</label>"
               html << "<span class=\"attachments-container dmsf-uploader\">"
             else
               html << "<span class=\"attachments-container dmsf-uploader\" style=\"border: 2px dashed #dfccaf; background: none;\">"
             end
-                html << context[:controller].send(:render_to_string,
-                  { partial: 'dmsf_upload/form',
-                    locals: { container: container, multiple: true, description: description, awf: true }})
-              html << '</span>'
+            html << context[:controller].send(:render_to_string,
+                                              { partial: 'dmsf_upload/form',
+                                                locals: { container: container, multiple: true, description: description, awf: true }})
+            html << '</span>'
             html << (description ? '</p>' : '</div>')
+            html << '<div style="clear: both;"></div>'
+            html << context[:hook_caller].late_javascript_tag do
+              'dmsf_hide_attachments();'
+            end
+
             html.html_safe
           end
         end

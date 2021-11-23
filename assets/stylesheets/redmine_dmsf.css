@@ -46,6 +46,11 @@
     box-shadow: none !important;
 }
 
+#all_attributes .dmsf.container-holder {
+  display: block;
+  clear: both;
+  min-width: calc(100% - 160px);
+}
 .dmsf-filename {
     padding: 0 10px 0 10px;
     float: right;

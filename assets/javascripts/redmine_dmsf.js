@@ -156,4 +156,8 @@ function noteMandatory(mandatory) {
   if(mandatory){
     note.focus();
   }
+} 
+
+function dmsf_hide_attachments() {
+  $('#issue-form fieldset:has(#new-attachments)').hide();
 }
